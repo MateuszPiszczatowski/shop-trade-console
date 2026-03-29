@@ -1,0 +1,19 @@
+package local.pk154938.shop.application.auth;
+
+public enum Operation {
+    ADD_ADMIN,
+    MODIFY_ADMIN,
+    REMOVE_ADMIN,
+    ADD_MANAGER,
+    MODIFY_MANAGER,
+    REMOVE_MANAGER,
+    ADD_EMPLOYEE,
+    MODIFY_EMPLOYEE,
+    REMOVE_EMPLOYEE,
+    VIEW_USER_LIST,
+    MAKE_SALE,
+    REGISTER_DELIVERY,
+    MAKE_RETURN,
+    PLACE_SUPPLIER_ORDER,
+    VIEW_STOCK
+}
