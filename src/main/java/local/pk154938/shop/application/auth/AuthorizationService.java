@@ -27,6 +27,8 @@ public class AuthorizationService {
         Permission required = securityMap.get(op);
         if(required==null)
             return true;
+        if(user==null)
+            return false;
         return user.getRoles().stream().anyMatch(role -> role.hasPermission(required));
     }
 }
