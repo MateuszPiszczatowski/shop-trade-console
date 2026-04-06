@@ -19,22 +19,43 @@ public class MainMenu {
         boolean running = true;
 
         while (running) {
-            System.out.println("=== MENU GŁÓWNE ===");
-            System.out.println("1. Zaloguj");
-            System.out.println("2. Wyjście");
-            System.out.print("Wybierz opcję: ");
+            if (session.isLoggedIn()) {
+                System.out.println("1. Wyloguj");
+                System.out.println("2. Zarządzanie użytkownikami");
+                System.out.println("0. Wyjście");
+                System.out.print("Wybierz opcję: ");
 
-            String choice = System.console().readLine();
+                String choice = System.console().readLine();
+                switch (choice) {
+                    case "1":
+                        session.logout();
+                        System.out.println("Wylogowano.");
+                        break;
+                    case "2":
+                        new UserManagementMenu(userService, session).show();
+                        break;
+                    case "0":
+                        running = false;
+                        break;
+                }
+            } else {
+                System.out.println("=== MENU GŁÓWNE ===");
+                System.out.println("1. Zaloguj");
+                System.out.println("0. Wyjście");
+                System.out.print("Wybierz opcję: ");
 
-            switch (choice) {
-                case "1":
-                    handleLogin();
-                    break;
-                case "2":
-                    running = false;
-                    break;
-                default:
-                    System.out.println("Niepoprawny wybór.");
+                String choice = System.console().readLine();
+
+                switch (choice) {
+                    case "1":
+                        handleLogin();
+                        break;
+                    case "0":
+                        running = false;
+                        break;
+                    default:
+                        System.out.println("Niepoprawny wybór.");
+                }
             }
         }
         System.out.println("Zamykanie programu...");
