@@ -4,32 +4,36 @@ import local.pk154938.shop.domain.user.Permission;
 import local.pk154938.shop.domain.user.User;
 
 import java.util.Map;
+import java.util.Set;
 
 public class AuthorizationService {
-    private final Map<Operation, Permission> securityMap = Map.ofEntries(
-            Map.entry(Operation.ADD_EMPLOYEE, Permission.MANAGE_EMPLOYEES),
-            Map.entry(Operation.MODIFY_EMPLOYEE, Permission.MANAGE_EMPLOYEES),
-            Map.entry(Operation.REMOVE_EMPLOYEE, Permission.MANAGE_EMPLOYEES),
-            Map.entry(Operation.ADD_MANAGER, Permission.MANAGE_MANAGERS),
-            Map.entry(Operation.MODIFY_MANAGER, Permission.MANAGE_MANAGERS),
-            Map.entry(Operation.REMOVE_MANAGER, Permission.MANAGE_MANAGERS),
-            Map.entry(Operation.ADD_ADMIN, Permission.MANAGE_ADMINISTRATORS),
-            Map.entry(Operation.MODIFY_ADMIN, Permission.MANAGE_ADMINISTRATORS),
-            Map.entry(Operation.REMOVE_ADMIN, Permission.MANAGE_ADMINISTRATORS),
-            Map.entry(Operation.VIEW_USER_LIST, Permission.VIEW_USERS),
-            Map.entry(Operation.VIEW_STOCK, Permission.PROCESS_TRADE),
-            Map.entry(Operation.MAKE_SALE, Permission.PROCESS_TRADE),
-            Map.entry(Operation.MAKE_RETURN, Permission.PROCESS_TRADE),
-            Map.entry(Operation.PLACE_SUPPLIER_ORDER, Permission.PROCESS_TRADE),
-            Map.entry(Operation.REGISTER_DELIVERY, Permission.PROCESS_TRADE),
-            Map.entry(Operation.ENTER_USER_MANAGEMENT, Permission.VIEW_USERS)
+    private final Map<Operation, Set<Permission>> securityMap = Map.ofEntries(
+            Map.entry(Operation.ADD_EMPLOYEE, Set.of(Permission.MANAGE_EMPLOYEES)),
+            Map.entry(Operation.MODIFY_EMPLOYEE, Set.of(Permission.MANAGE_EMPLOYEES)),
+            Map.entry(Operation.REMOVE_EMPLOYEE, Set.of(Permission.MANAGE_EMPLOYEES)),
+            Map.entry(Operation.ADD_MANAGER, Set.of(Permission.MANAGE_MANAGERS)),
+            Map.entry(Operation.MODIFY_MANAGER, Set.of(Permission.MANAGE_MANAGERS)),
+            Map.entry(Operation.REMOVE_MANAGER, Set.of(Permission.MANAGE_MANAGERS)),
+            Map.entry(Operation.ADD_ADMIN, Set.of(Permission.MANAGE_ADMINISTRATORS)),
+            Map.entry(Operation.MODIFY_ADMIN, Set.of(Permission.MANAGE_ADMINISTRATORS)),
+            Map.entry(Operation.REMOVE_ADMIN, Set.of(Permission.MANAGE_ADMINISTRATORS)),
+            Map.entry(Operation.VIEW_USER_LIST, Set.of(Permission.VIEW_USERS)),
+            Map.entry(Operation.VIEW_STOCK, Set.of(Permission.PROCESS_TRADE)),
+            Map.entry(Operation.MAKE_SALE, Set.of(Permission.PROCESS_TRADE)),
+            Map.entry(Operation.MAKE_RETURN, Set.of(Permission.PROCESS_TRADE)),
+            Map.entry(Operation.PLACE_SUPPLIER_ORDER, Set.of(Permission.PROCESS_TRADE)),
+            Map.entry(Operation.REGISTER_DELIVERY, Set.of(Permission.PROCESS_TRADE)),
+            Map.entry(Operation.ENTER_USER_MANAGEMENT, Set.of(Permission.VIEW_USERS, Permission.MANAGE_EMPLOYEES, Permission.MANAGE_MANAGERS, Permission.MANAGE_ADMINISTRATORS))
     );
-    public boolean isAuthorized(User user, Operation op){
-        Permission required = securityMap.get(op);
-        if(required==null)
+
+    public boolean isAuthorized(User user, Operation op) {
+        Set<Permission> requiredPermissions = securityMap.get(op);
+        if (requiredPermissions == null || requiredPermissions.isEmpty())
             return true;
-        if(user==null)
+        if (user == null)
             return false;
-        return user.getRoles().stream().anyMatch(role -> role.hasPermission(required));
+
+        return requiredPermissions.stream()
+                .anyMatch(reqPerm -> user.getRoles().stream().anyMatch(role -> role.hasPermission(reqPerm)));
     }
 }
