@@ -17,8 +17,11 @@ public class UserService {
         this.userRepository = userRepository;
         this.authService = authService;
     }
-    public Optional<User> login(String username){
-        return userRepository.findByUsername(username);
+    public Optional<User> login(String username, String rawPassword){
+        return userRepository.findByUsername(username).filter(user -> {
+            String attemptHash = SecurityUtils.hashPassword(rawPassword, user.getSalt());
+            return attemptHash.equals(user.getHashedPassword());
+        });
     }
 
     public void removeUser(String username) {
