@@ -6,6 +6,7 @@ import local.pk154938.shop.application.service.UserService;
 import local.pk154938.shop.application.session.Session;
 import local.pk154938.shop.domain.user.User;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 public class MainMenu extends BaseMenu {
@@ -20,7 +21,7 @@ public class MainMenu extends BaseMenu {
         System.out.print("Login: ");
         String login = System.console().readLine();
         System.out.print("Hasło: ");
-        String password = System.console().readLine();
+        String password = Arrays.toString(System.console().readPassword());
 
         Optional<User> user = userService.login(login);
         if (user.isPresent()) {

@@ -6,6 +6,8 @@ import local.pk154938.shop.application.service.UserService;
 import local.pk154938.shop.application.session.Session;
 import local.pk154938.shop.domain.user.Role;
 
+import java.util.Arrays;
+
 public class UserManagementMenu extends BaseMenu {
     private final UserService userService;
     private final Session session;
@@ -32,7 +34,7 @@ public class UserManagementMenu extends BaseMenu {
         System.out.print("Podaj login: ");
         String login = System.console().readLine();
         System.out.print("Podaj hasło: ");
-        String pass = System.console().readLine();
+        String pass = Arrays.toString(System.console().readPassword());
 
         Role role = chooseRole();
         if (role == null) return;
