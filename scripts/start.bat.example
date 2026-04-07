@@ -2,6 +2,10 @@
 :: SZABLON STARTOWY - Skopiuj ten plik jako start.bat i ustaw własny pieprz!
 set SHOP_APP_PEPPER=ZmienTenPieprzNaWlasnySekret123!
 
+:: Domyślne dane logowania dla pierwszego administratora
+set SHOP_DEFAULT_ADMIN_USER=admin
+set SHOP_DEFAULT_ADMIN_PASS=admin
+
 for /f "tokens=2 delims=:" %%a in ('chcp') do set "c=%%a"
 chcp 65001 > nul
 java -Dfile.encoding=UTF-8 -jar ..\out\artifacts\ProgramowanieObiektoweProjekt_jar\ProgramowanieObiektoweProjekt.jar
