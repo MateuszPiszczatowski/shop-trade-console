@@ -24,8 +24,36 @@ public class UserService {
         });
     }
 
-    public void removeUser(String username) {
-        userRepository.delete(username);
+    private void validateRemovalPermissions(User targetUser, User currentUser) {
+        for (Role role : targetUser.getRoles()) {
+            Operation requiredOp = mapRoleToRemoveOperation(role);
+            if (!authService.isAuthorized(currentUser, requiredOp)) {
+                throw new SecurityException("Brak uprawnień do usunięcia roli: " + role);
+            }
+        }
+    }
+
+    private void preventLastAdminRemoval(User targetUser) {
+        if (targetUser.getRoles().contains(Role.ADMIN) && isLastAdmin()) {
+            throw new IllegalStateException("Nie można usunąć ostatniego administratora.");
+        }
+    }
+
+    private boolean isLastAdmin() {
+        return userRepository.findAll().stream()
+                .filter(u -> u.getRoles().contains(Role.ADMIN))
+                .count() <= 1;
+    }
+
+    public void removeUser(String targetUsername, User currentUser) {
+        User targetUser = userRepository.findByUsername(targetUsername)
+                .orElseThrow(() -> new IllegalArgumentException("Nie znaleziono użytkownika o podanym loginie."));
+
+        validateRemovalPermissions(targetUser, currentUser);
+
+        preventLastAdminRemoval(targetUser);
+
+        userRepository.delete(targetUsername);
     }
 
     public void createAndAddUser(String username, String password, Role roleToCreate, User currentUser) {
@@ -57,6 +85,15 @@ public class UserService {
             case ADMIN: return Operation.ADD_ADMIN;
             case MANAGER: return Operation.ADD_MANAGER;
             case EMPLOYEE: return Operation.ADD_EMPLOYEE;
+            default: throw new IllegalStateException("Nieobsługiwana rola");
+        }
+    }
+
+    private Operation mapRoleToRemoveOperation(Role role) {
+        switch (role) {
+            case ADMIN: return Operation.REMOVE_ADMIN;
+            case MANAGER: return Operation.REMOVE_MANAGER;
+            case EMPLOYEE: return Operation.REMOVE_EMPLOYEE;
             default: throw new IllegalStateException("Nieobsługiwana rola");
         }
     }
