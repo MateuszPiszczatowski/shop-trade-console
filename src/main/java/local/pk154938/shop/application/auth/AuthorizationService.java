@@ -22,8 +22,7 @@ public class AuthorizationService {
             Map.entry(Operation.MAKE_SALE, Set.of(Permission.PROCESS_TRADE)),
             Map.entry(Operation.MAKE_RETURN, Set.of(Permission.PROCESS_TRADE)),
             Map.entry(Operation.PLACE_SUPPLIER_ORDER, Set.of(Permission.PROCESS_TRADE)),
-            Map.entry(Operation.REGISTER_DELIVERY, Set.of(Permission.PROCESS_TRADE)),
-            Map.entry(Operation.ENTER_USER_MANAGEMENT, Set.of(Permission.VIEW_USERS, Permission.MANAGE_EMPLOYEES, Permission.MANAGE_MANAGERS, Permission.MANAGE_ADMINISTRATORS))
+            Map.entry(Operation.REGISTER_DELIVERY, Set.of(Permission.PROCESS_TRADE))
     );
 
     public boolean isAuthorized(User user, Operation op) {

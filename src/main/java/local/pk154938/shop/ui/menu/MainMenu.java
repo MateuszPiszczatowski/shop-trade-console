@@ -45,7 +45,10 @@ public class MainMenu extends BaseMenu {
     @Override
     protected void addOptions() {
         if (session.isLoggedIn()) {
-            addOption("Zarządzanie użytkownikami", this::enterUserManagement, Operation.ENTER_USER_MANAGEMENT);
+            addOption("Zarządzanie użytkownikami", this::enterUserManagement, 
+                    Operation.VIEW_USER_LIST, Operation.ADD_EMPLOYEE, Operation.REMOVE_EMPLOYEE, 
+                    Operation.ADD_MANAGER, Operation.REMOVE_MANAGER, 
+                    Operation.ADD_ADMIN, Operation.REMOVE_ADMIN);
             addOption("Wyloguj", this::logout, Operation.UNRESTRICTED);
         } else {
             addOption("Zaloguj", this::handleLogin, Operation.UNRESTRICTED);
