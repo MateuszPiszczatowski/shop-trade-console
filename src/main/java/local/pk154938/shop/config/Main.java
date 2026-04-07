@@ -6,8 +6,6 @@ import local.pk154938.shop.application.session.Session;
 import local.pk154938.shop.infrastructure.persistence.InMemoryUserRepository;
 import local.pk154938.shop.ui.menu.MainMenu;
 
-import java.util.Set;
-
 public class Main {
     public static void main(String[] args) {
         Session session = new Session();
