@@ -37,6 +37,10 @@ public abstract class BaseMenu {
         while (running) {
             prepareOptions();
             addOptions();
+            if(options.isEmpty()){
+                running=false;
+                break;
+            }
             display();
             running = handleInput();
         }
