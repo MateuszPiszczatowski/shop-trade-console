@@ -6,6 +6,7 @@ import local.pk154938.shop.application.repository.UserRepository;
 import local.pk154938.shop.domain.user.*;
 import local.pk154938.shop.util.SecurityUtils;
 
+import java.util.UUID;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -53,7 +54,7 @@ public class UserService {
 
         preventLastAdminRemoval(targetUser);
 
-        userRepository.delete(targetUsername);
+        userRepository.delete(targetUser.getId());
     }
 
     public void createAndAddUser(String username, String password, Role roleToCreate, User currentUser) {
