@@ -27,7 +27,7 @@ public abstract class User {
     }
 
     public User withUsername(String newUsername){
-        return copy(username, this.hashedPassword);
+        return copy(newUsername, this.hashedPassword);
     }
 
     public User withPassword(String newPassword){
