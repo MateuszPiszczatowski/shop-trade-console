@@ -61,6 +61,8 @@ public class UserService {
         if (!authService.isAuthorized(currentUser, op)) {
             throw new IllegalStateException("Brak uprawnień! Twoja ranga nie pozwala na tworzenie roli: " + roleToCreate);
         }
+        if(userRepository.findByUsername(username).isPresent())
+            throw new IllegalStateException("Użytkownik o podanym loginie już istnieje.");
 
         User newUser;
         String salt = SecurityUtils.generateSalt();

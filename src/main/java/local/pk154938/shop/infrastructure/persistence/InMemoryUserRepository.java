@@ -14,8 +14,6 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public void save(User user) {
-        if(findByUsername(user.getUsername()).isPresent())
-            throw new IllegalStateException("BŁĄD: Użytkownik "+user.getUsername()+" już istnieje!");
         users.put(user.getId(), user);
     }
 
