@@ -1,6 +1,4 @@
 package local.pk154938.shop.domain.user;
-
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
