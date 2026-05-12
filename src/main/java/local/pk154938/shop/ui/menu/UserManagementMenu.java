@@ -7,7 +7,6 @@ import local.pk154938.shop.application.session.Session;
 import local.pk154938.shop.domain.user.Role;
 import local.pk154938.shop.util.SecurityUtils;
 
-import java.util.Arrays;
 
 public class UserManagementMenu extends BaseMenu {
     private final UserService userService;
@@ -24,7 +23,11 @@ public class UserManagementMenu extends BaseMenu {
         addOption("Lista użytkowników", this::list, Operation.VIEW_USER_LIST);
         addOption("Dodaj użytkownika", this::add, Operation.ADD_EMPLOYEE);
         addOption("Usuń użytkownika", this::remove, Operation.REMOVE_EMPLOYEE);
+        addOption("Modyfikuj użytkownika", this::changeOtherUser, Operation.MODIFY_EMPLOYEE, Operation.MODIFY_MANAGER, Operation.MODIFY_ADMIN);
     }
+
+    private static final String SELF_OPERATION_BLOCKED =
+            "Nie możesz modyfikować własnego konta z poziomu zarządzania użytkownikami. Użyj menu Zarządzanie kontem.";
 
     private void list() {
         System.out.println("\n--- LISTA UŻYTKOWNIKÓW ---");
@@ -67,24 +70,14 @@ public class UserManagementMenu extends BaseMenu {
             System.out.println("Usuwanie anulowane.");
             return;
         }
-        boolean isSelfDeletion = login.equals(session.getCurrentUser().getUsername());
-        
-        if (isSelfDeletion) {
-            System.out.print("Czy na pewno chcesz usunąć własne konto? Operacja jest nieodwracalna. (T/N): ");
-            String confirm = System.console().readLine();
-            if (!confirm.equalsIgnoreCase("T")) {
-                System.out.println("Anulowano usuwanie konta.");
-                return;
-            }
+        if (login.equals(session.getCurrentUser().getUsername())) {
+            System.out.println(SELF_OPERATION_BLOCKED);
+            return;
         }
 
         try {
             userService.removeUser(login, session.getCurrentUser());
             System.out.println("Pomyślnie usunięto użytkownika: " + login);
-            if (isSelfDeletion) {
-                session.logout();
-                System.out.println("Zostałeś wylogowany, ponieważ Twoje konto zostało usunięte.");
-            }
         } catch (IllegalArgumentException | IllegalStateException e) {
             System.out.println("BŁĄD: " + e.getMessage());
         } catch (SecurityException e) {
@@ -107,4 +100,48 @@ public class UserManagementMenu extends BaseMenu {
                 return null;
         }
     }
+
+    private void changeOtherUser() {
+        System.out.print("Podaj login użytkownika do modyfikacji: ");
+        String login = System.console().readLine();
+        if (login.isBlank()) {
+            System.out.println("Anulowano.");
+            return;
+        }
+
+        if (login.equals(session.getCurrentUser().getUsername())) {
+            System.out.println(SELF_OPERATION_BLOCKED);
+            return;
+        }
+
+        System.out.println("Wybierz co chcesz zmienić: 1. Nazwa użytkownika | 2. Hasło");
+        System.out.print("Wybór: ");
+        String choice = System.console().readLine();
+
+        try {
+            if ("1".equals(choice)) {
+                System.out.print("Podaj nową nazwę użytkownika: ");
+                String newLogin = System.console().readLine();
+                if (newLogin.isBlank()) return;
+                userService.changeUsername(login, newLogin, session.getCurrentUser());
+                System.out.println("Pomyślnie zmieniono nazwę użytkownika.");
+            } else if ("2".equals(choice)) {
+                System.out.print("Podaj nowe hasło: ");
+                String pass = new String(System.console().readPassword());
+                if (!SecurityUtils.isPasswordStrong(pass)) {
+                    System.out.println("BŁĄD: Hasło nie spełnia wymogów bezpieczeństwa.");
+                    return;
+                }
+                userService.changePassword(login, pass, session.getCurrentUser());
+                System.out.println("Pomyślnie zmieniono hasło.");
+            } else {
+                System.out.println("Niepoprawny wybór.");
+            }
+        } catch (SecurityException e) {
+            System.out.println("ODMOWA DOSTĘPU: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("BŁĄD: " + e.getMessage());
+        }
+    }
+
 }
