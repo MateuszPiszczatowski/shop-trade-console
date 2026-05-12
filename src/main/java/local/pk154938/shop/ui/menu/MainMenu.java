@@ -49,9 +49,9 @@ public class MainMenu extends BaseMenu {
                     Operation.VIEW_USER_LIST, Operation.ADD_EMPLOYEE, Operation.REMOVE_EMPLOYEE, 
                     Operation.ADD_MANAGER, Operation.REMOVE_MANAGER, 
                     Operation.ADD_ADMIN, Operation.REMOVE_ADMIN);
-            addOption("Wyloguj", this::logout, Operation.UNRESTRICTED);
+            addOption("Wyloguj", this::logout, Operation.AUTHENTICATED);
         } else {
-            addOption("Zaloguj", this::handleLogin, Operation.UNRESTRICTED);
+            addOption("Zaloguj", this::handleLogin, Operation.ANONYMOUS);
         }
     }
 }

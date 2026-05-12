@@ -1,7 +1,8 @@
 package local.pk154938.shop.application.auth;
 
 public enum Operation {
-    UNRESTRICTED,
+    ANONYMOUS,
+    AUTHENTICATED,
     ADD_ADMIN,
     MODIFY_ADMIN,
     REMOVE_ADMIN,

@@ -26,11 +26,13 @@ public class AuthorizationService {
     );
 
     public boolean isAuthorized(User user, Operation op) {
+        if (op == Operation.ANONYMOUS) return true;
+        if (user == null) return false;
+        if (op == Operation.AUTHENTICATED) return true;
+
         Set<Permission> requiredPermissions = securityMap.get(op);
         if (requiredPermissions == null || requiredPermissions.isEmpty())
             return true;
-        if (user == null)
-            return false;
 
         return requiredPermissions.stream()
                 .anyMatch(reqPerm -> user.getRoles().stream().anyMatch(role -> role.hasPermission(reqPerm)));

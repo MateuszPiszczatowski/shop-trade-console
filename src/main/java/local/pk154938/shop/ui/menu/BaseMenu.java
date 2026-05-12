@@ -27,7 +27,7 @@ public abstract class BaseMenu {
 
     protected final void addOption(String label, Runnable action, Operation... ops){
         for (Operation op : ops) {
-            if (op == Operation.UNRESTRICTED || authorizationService.isAuthorized(session.getCurrentUser(), op)) {
+            if (authorizationService.isAuthorized(session.getCurrentUser(), op)) {
                 options.add(new MenuOption(label, action));
                 return; // Opcja została dodana, nie musimy sprawdzać reszty operacji
             }
