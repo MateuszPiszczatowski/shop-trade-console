@@ -70,7 +70,7 @@ public class UserManagementMenu extends BaseMenu {
             System.out.println("Usuwanie anulowane.");
             return;
         }
-        if (login.equals(session.getCurrentUser().getUsername())) {
+        if (login.equalsIgnoreCase(session.getCurrentUser().getUsername())) {
             System.out.println(SELF_OPERATION_BLOCKED);
             return;
         }
@@ -109,7 +109,7 @@ public class UserManagementMenu extends BaseMenu {
             return;
         }
 
-        if (login.equals(session.getCurrentUser().getUsername())) {
+        if (login.equalsIgnoreCase(session.getCurrentUser().getUsername())) {
             System.out.println(SELF_OPERATION_BLOCKED);
             return;
         }
