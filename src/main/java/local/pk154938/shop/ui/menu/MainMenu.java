@@ -44,6 +44,10 @@ public class MainMenu extends BaseMenu {
         new AccountManagementMenu(userService, session, authorizationService).show();
     }
 
+    private void enterTradeMenu() {
+        new TradeMenu(session, authorizationService).show();
+    }
+
 
     @Override
     protected void addOptions() {
@@ -52,6 +56,9 @@ public class MainMenu extends BaseMenu {
                     Operation.VIEW_USER_LIST, Operation.ADD_EMPLOYEE, Operation.REMOVE_EMPLOYEE,
                     Operation.ADD_MANAGER, Operation.REMOVE_MANAGER,
                     Operation.ADD_ADMIN, Operation.REMOVE_ADMIN);
+            addOption("Operacje handlowe", this::enterTradeMenu,
+                    Operation.VIEW_STOCK, Operation.MAKE_SALE, Operation.MAKE_RETURN,
+                    Operation.REGISTER_DELIVERY, Operation.PLACE_SUPPLIER_ORDER);
             addOption("Zarządzanie kontem", this::enterAccountManagement, Operation.AUTHENTICATED);
             addOption("Wyloguj", this::logout, Operation.AUTHENTICATED);
         } else {
