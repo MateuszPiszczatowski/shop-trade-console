@@ -18,7 +18,10 @@ public final class InputReader {
     }
 
     public static String readNonBlankString(String prompt) {
-        String s = System.console().readLine(prompt);
+        System.out.print(prompt);
+
+        System.out.flush();
+        String s = System.console().readLine();
         if (s == null || s.isBlank()) throw new CancelledException();
         return s.trim();
     }

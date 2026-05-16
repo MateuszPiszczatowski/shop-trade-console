@@ -27,7 +27,9 @@ public class Main {
     public static void terminate(ExitCode exitCode) {
         System.err.println("ZAMYKANIE: " + exitCode.getMessage());
         if (System.console() != null) {
-            System.console().readLine("Naciśnij Enter, aby zamknąć: ");
+            System.out.print("Naciśnij Enter, aby zamknąć: ");
+            System.out.flush();
+            System.console().readLine();
         }
         System.exit(exitCode.getCode());
     }

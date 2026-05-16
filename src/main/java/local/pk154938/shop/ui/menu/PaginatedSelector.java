@@ -24,8 +24,9 @@ public final class PaginatedSelector {
         int page = 0;
         while (true) {
             renderPage(header, items, renderer, page, maxPage);
-            String prompt = "Wybór (1-" + items.size() + "), N = następna strona, puste = anuluj: ";
-            String input = System.console().readLine(prompt);
+            System.out.print("Wybór (1-" + items.size() + "), N = następna strona, puste = anuluj: ");
+            System.out.flush();
+            String input = System.console().readLine();
             if (input == null || input.isBlank()) return Optional.empty();
             if (input.equalsIgnoreCase("N")) {
                 if (page < maxPage) page++;
@@ -51,8 +52,9 @@ public final class PaginatedSelector {
         int page = 0;
         while (true) {
             renderPage(header, items, renderer, page, maxPage);
-            String prompt = "N = następna strona, puste = powrót: ";
-            String input = System.console().readLine(prompt);
+            System.out.print("N = następna strona, puste = powrót: ");
+            System.out.flush();
+            String input = System.console().readLine();
             if (input == null || input.isBlank()) return;
             if (input.equalsIgnoreCase("N")) {
                 if (page < maxPage) page++;
