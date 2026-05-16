@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class OrderSubmenu extends BaseMenu {
     private final TradeService tradeService;
@@ -51,7 +52,7 @@ public class OrderSubmenu extends BaseMenu {
     private void cancelOrder() {
         List<Order> cancellable = tradeRepository.findOrders().stream()
                 .filter(o -> o.getStatus() == OrderStatus.OPEN)
-                .toList();
+                .collect(Collectors.toList());
         Optional<Order> selected = PaginatedSelector.selectOne(
                 "Zamówienia możliwe do anulowania", cancellable, Formatters::renderOrder);
         if (selected.isEmpty()) {

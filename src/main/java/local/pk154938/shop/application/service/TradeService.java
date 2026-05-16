@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Application service orchestrating all trade-domain mutations. Holds the
@@ -208,14 +209,14 @@ public class TradeService {
         return tradeRepository.findDeliveries().stream()
                 .filter(d -> d.getOrderId().equals(orderId))
                 .flatMap(d -> d.getLines().stream())
-                .toList();
+                .collect(Collectors.toList());
     }
 
     private List<OperationLine> allDeliveredLinesFor(UUID orderId) {
         return tradeRepository.findDeliveries().stream()
                 .filter(d -> d.getOrderId().equals(orderId) && d.getStatus() == DeliveryStatus.DELIVERED)
                 .flatMap(d -> d.getLines().stream())
-                .toList();
+                .collect(Collectors.toList());
     }
 
     private static Map<Product, Integer> sumByProduct(List<OperationLine> lines) {

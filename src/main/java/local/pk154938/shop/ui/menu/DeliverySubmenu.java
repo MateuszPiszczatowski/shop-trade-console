@@ -15,6 +15,7 @@ import local.pk154938.shop.domain.trade.Product;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class DeliverySubmenu extends BaseMenu {
     private final TradeService tradeService;
@@ -37,7 +38,7 @@ public class DeliverySubmenu extends BaseMenu {
     private void registerDispatched() {
         List<Order> open = tradeRepository.findOrders().stream()
                 .filter(o -> o.getStatus() == OrderStatus.OPEN || o.getStatus() == OrderStatus.PARTIAL)
-                .toList();
+                .collect(Collectors.toList());
         Optional<Order> selected = PaginatedSelector.selectOne(
                 "Wybierz zamówienie do realizacji dostawy", open, Formatters::renderOrder);
         if (selected.isEmpty()) {
@@ -62,7 +63,7 @@ public class DeliverySubmenu extends BaseMenu {
     private void confirmDelivery() {
         List<Delivery> dispatched = tradeRepository.findDeliveries().stream()
                 .filter(d -> d.getStatus() == DeliveryStatus.DISPATCHED)
-                .toList();
+                .collect(Collectors.toList());
         Optional<Delivery> selected = PaginatedSelector.selectOne(
                 "Dostawy oczekujące na potwierdzenie", dispatched, Formatters::renderDelivery);
         if (selected.isEmpty()) {

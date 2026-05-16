@@ -15,6 +15,7 @@ import local.pk154938.shop.domain.trade.Return;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class ReturnSubmenu extends BaseMenu {
     private final TradeService tradeService;
@@ -40,7 +41,7 @@ public class ReturnSubmenu extends BaseMenu {
     private void recordReturn() {
         List<Order> returnable = tradeRepository.findOrders().stream()
                 .filter(o -> o.getStatus() == OrderStatus.PARTIAL || o.getStatus() == OrderStatus.FULFILLED)
-                .toList();
+                .collect(Collectors.toList());
         Optional<Order> selected = PaginatedSelector.selectOne(
                 "Wybierz zamówienie, do którego dokonujesz zwrotu", returnable, Formatters::renderOrder);
         if (selected.isEmpty()) {

@@ -12,6 +12,7 @@ import local.pk154938.shop.domain.trade.Sale;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Replays all persisted trade operations to rebuild the in-memory state:
@@ -43,7 +44,7 @@ public class TradeBootstrapper {
     public void bootstrap() {
         List<ItemOperation> chronological = tradeRepository.findAll().stream()
                 .sorted(Comparator.comparing(ItemOperation::getTimestamp))
-                .toList();
+                .collect(Collectors.toList());
 
         for (ItemOperation op : chronological) {
             refreshCatalog(op.getLines());
