@@ -6,8 +6,8 @@ set SHOP_APP_PEPPER=ZmienTenPieprzNaWlasnySekret123!
 set SHOP_DEFAULT_ADMIN_USER=admin
 set SHOP_DEFAULT_ADMIN_PASS=Admin1234!
 
-:: Zależność org.json (lib/json-20250517.jar) musi być dostępna obok zbudowanego .jar-a
-:: (Class-Path w MANIFEST.MF wskazuje ją relatywnie do pliku wykonywalnego).
+:: Zależność org.json jest wbudowana w artefakt .jar (fat jar), więc nic nie
+:: musi leżeć obok pliku wykonywalnego.
 
 for /f "tokens=2 delims=:" %%a in ('chcp') do set "c=%%a"
 chcp 65001 > nul
