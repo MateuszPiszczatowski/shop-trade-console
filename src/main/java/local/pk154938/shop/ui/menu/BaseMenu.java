@@ -64,7 +64,7 @@ public abstract class BaseMenu {
     private boolean handleInput(){
         System.out.print("Wybór: ");
         System.out.flush();
-        String input = System.console().readLine();
+        String input = ConsoleIo.readLine();
 
         if ("0".equals(input)) {
             return false;

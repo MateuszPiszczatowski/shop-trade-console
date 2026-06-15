@@ -36,9 +36,9 @@ public class MainMenu extends BaseMenu {
 
     private void handleLogin() {
         System.out.print("Login: ");
-        String login = System.console().readLine();
+        String login = ConsoleIo.readLine();
         System.out.print("Hasło: ");
-        String password = new String(System.console().readPassword());
+        String password = new String(ConsoleIo.readPassword());
 
         Optional<User> user = userService.login(login, password);
         if (user.isPresent()) {

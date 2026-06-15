@@ -21,7 +21,7 @@ public final class InputReader {
         System.out.print(prompt);
 
         System.out.flush();
-        String s = System.console().readLine();
+        String s = ConsoleIo.readLine();
         if (s == null || s.isBlank()) throw new CancelledException();
         return s.trim();
     }

@@ -31,7 +31,7 @@ public class AccountManagementMenu extends BaseMenu {
 
     private void changePassword() {
         System.out.print("Podaj nowe hasło: ");
-        String pass = new String(System.console().readPassword());
+        String pass = new String(ConsoleIo.readPassword());
         if (!SecurityUtils.isPasswordStrong(pass)) {
             System.out.println("BŁĄD: Hasło musi składać się z minimum 8 znaków i zawierać małą literę, wielką literę, cyfrę oraz znak specjalny.");
             return;
@@ -49,7 +49,7 @@ public class AccountManagementMenu extends BaseMenu {
 
     private void changeUsername() {
         System.out.print("Podaj nową nazwę użytkownika: ");
-        String newLogin = System.console().readLine();
+        String newLogin = ConsoleIo.readLine();
         if (newLogin.isBlank()) {
             System.out.println("Anulowano.");
             return;
@@ -67,7 +67,7 @@ public class AccountManagementMenu extends BaseMenu {
 
     private void removeAccount() {
         System.out.print("Czy na pewno chcesz usunąć własne konto? Operacja jest nieodwracalna. (T/N): ");
-        String confirm = System.console().readLine();
+        String confirm = ConsoleIo.readLine();
         if (!confirm.equalsIgnoreCase("T")) {
             System.out.println("Anulowano usuwanie konta.");
             return;

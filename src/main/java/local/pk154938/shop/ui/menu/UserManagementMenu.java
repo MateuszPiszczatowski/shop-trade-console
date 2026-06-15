@@ -37,14 +37,14 @@ public class UserManagementMenu extends BaseMenu {
 
     private void add() {
         System.out.print("Podaj login: ");
-        String login = System.console().readLine();
+        String login = ConsoleIo.readLine();
         if(login.isBlank())
         {
             System.out.println("Dodawanie anulowane.");
             return;
         }
         System.out.print("Podaj hasło: ");
-        String pass = new String(System.console().readPassword());
+        String pass = new String(ConsoleIo.readPassword());
 
         if (!SecurityUtils.isPasswordStrong(pass)) {
             System.out.println("BŁĄD: Hasło musi składać się z minimum 8 znaków i zawierać małą literę, wielką literę, cyfrę oraz znak specjalny.");
@@ -64,7 +64,7 @@ public class UserManagementMenu extends BaseMenu {
 
     private void remove() {
         System.out.print("Podaj login użytkownika do usunięcia: ");
-        String login = System.console().readLine();
+        String login = ConsoleIo.readLine();
         if(login.isBlank())
         {
             System.out.println("Usuwanie anulowane.");
@@ -87,7 +87,7 @@ public class UserManagementMenu extends BaseMenu {
 
     private Role chooseRole() {
         System.out.println("Wybierz rolę: 1. ADMIN | 2. MANAGER | 3. EMPLOYEE");
-        String r = System.console().readLine();
+        String r = ConsoleIo.readLine();
         switch (r) {
             case "1":
                 return Role.ADMIN;
@@ -103,7 +103,7 @@ public class UserManagementMenu extends BaseMenu {
 
     private void changeOtherUser() {
         System.out.print("Podaj login użytkownika do modyfikacji: ");
-        String login = System.console().readLine();
+        String login = ConsoleIo.readLine();
         if (login.isBlank()) {
             System.out.println("Anulowano.");
             return;
@@ -116,18 +116,18 @@ public class UserManagementMenu extends BaseMenu {
 
         System.out.println("Wybierz co chcesz zmienić: 1. Nazwa użytkownika | 2. Hasło");
         System.out.print("Wybór: ");
-        String choice = System.console().readLine();
+        String choice = ConsoleIo.readLine();
 
         try {
             if ("1".equals(choice)) {
                 System.out.print("Podaj nową nazwę użytkownika: ");
-                String newLogin = System.console().readLine();
+                String newLogin = ConsoleIo.readLine();
                 if (newLogin.isBlank()) return;
                 userService.changeUsername(login, newLogin, session.getCurrentUser());
                 System.out.println("Pomyślnie zmieniono nazwę użytkownika.");
             } else if ("2".equals(choice)) {
                 System.out.print("Podaj nowe hasło: ");
-                String pass = new String(System.console().readPassword());
+                String pass = new String(ConsoleIo.readPassword());
                 if (!SecurityUtils.isPasswordStrong(pass)) {
                     System.out.println("BŁĄD: Hasło nie spełnia wymogów bezpieczeństwa.");
                     return;
