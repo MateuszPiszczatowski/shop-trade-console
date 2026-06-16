@@ -13,7 +13,13 @@ public class InMemoryStockRepository implements StockRepository {
     @Override
     public void increase(Product product, int amount) {
         requirePositive(amount);
-        stock.merge(product, amount, Integer::sum);
+        // Re-key on the product object just supplied so getAll() doesn't keep an
+        // outdated price/VAT snapshot (Product equality is name-based, and a plain
+        // merge would retain the first-seen key). The authoritative price for
+        // display still comes from the catalog (ProductRepository).
+        int next = stock.getOrDefault(product, 0) + amount;
+        stock.remove(product);
+        stock.put(product, next);
     }
 
     @Override
