@@ -55,7 +55,8 @@ public class TradeMenu extends BaseMenu {
     }
 
     private void enterOrders() {
-        new OrderSubmenu(tradeService, tradeRepository, session, authorizationService).show();
+        new OrderSubmenu(tradeService, tradeRepository, productRepository,
+                session, authorizationService).show();
     }
 
     private void enterDeliveries() {
@@ -76,7 +77,10 @@ public class TradeMenu extends BaseMenu {
         Map<Product, Integer> stock = stockRepository.getAll();
         List<Map.Entry<Product, Integer>> entries = new ArrayList<>(stock.entrySet());
         PaginatedSelector.display("Stan magazynu", entries, e -> {
-            Product p = e.getKey();
+            // Price/VAT come from the catalog (single source of truth, latest
+            // snapshot wins) rather than from the stock key, which only carries
+            // a quantity. Fall back to the key if the catalog has no entry.
+            Product p = productRepository.findByName(e.getKey().getName()).orElse(e.getKey());
             return p.getName() + "  |  " + e.getValue() + " szt."
                     + "  |  netto sprzedaży: " + p.getPriceNetSale()
                     + "  |  brutto sprzedaży: " + p.priceGrossSale();
