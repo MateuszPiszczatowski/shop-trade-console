@@ -53,7 +53,8 @@ public class SaleSubmenu extends BaseMenu {
     }
 
     private void listSales() {
-        PaginatedSelector.display("Lista sprzedaży", tradeRepository.findSales(), Formatters::renderSale);
+        PaginatedSelector.browse("Lista sprzedaży", tradeRepository.findSales(),
+                Formatters::renderSale, Formatters::saleDetail);
     }
 
     private List<OperationLine> readSaleLines() {

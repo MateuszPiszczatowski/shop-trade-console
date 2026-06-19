@@ -81,7 +81,8 @@ public class DeliverySubmenu extends BaseMenu {
     }
 
     private void listDeliveries() {
-        PaginatedSelector.display("Lista dostaw", tradeRepository.findDeliveries(), Formatters::renderDelivery);
+        PaginatedSelector.browse("Lista dostaw", tradeRepository.findDeliveries(),
+                Formatters::renderDelivery, Formatters::deliveryDetail);
     }
 
     /**

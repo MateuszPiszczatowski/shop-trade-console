@@ -58,12 +58,14 @@ public class ReturnSubmenu extends BaseMenu {
         } catch (SecurityException e) {
             System.out.println("ODMOWA DOSTĘPU: " + e.getMessage());
         } catch (Exception e) {
+
             System.out.println("BŁĄD: " + e.getMessage());
         }
     }
 
     private void listReturns() {
-        PaginatedSelector.display("Lista zwrotów", tradeRepository.findReturns(), Formatters::renderReturn);
+        PaginatedSelector.browse("Lista zwrotów", tradeRepository.findReturns(),
+                Formatters::renderReturn, Formatters::returnDetail);
     }
 
     /**

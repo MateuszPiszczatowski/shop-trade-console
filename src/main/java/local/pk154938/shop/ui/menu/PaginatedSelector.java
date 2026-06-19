@@ -43,6 +43,41 @@ public final class PaginatedSelector {
         }
     }
 
+    /**
+     * Paged read-only lister that lets the user drill into a single item:
+     * typing a number prints {@code detail.apply(item)} and stays on the list,
+     * {@code N} advances a page, empty returns. Used by the trade history
+     * views so a list row can be expanded into full operation details.
+     */
+    public static <T> void browse(String header, List<T> items,
+                                  Function<T, String> summary, Function<T, String> detail) {
+        if (items.isEmpty()) {
+            System.out.println("Brak elementów.");
+            return;
+        }
+        int maxPage = (items.size() - 1) / PAGE_SIZE;
+        int page = 0;
+        while (true) {
+            renderPage(header, items, summary, page, maxPage);
+            System.out.print("Numer = szczegóły, N = następna strona, puste = powrót: ");
+            System.out.flush();
+            String input = ConsoleIo.readLine();
+            if (input == null || input.isBlank()) return;
+            if (input.equalsIgnoreCase("N")) {
+                if (page < maxPage) page++;
+                else System.out.println("To już ostatnia strona.");
+                continue;
+            }
+            try {
+                int idx = Integer.parseInt(input.trim());
+                if (idx >= 1 && idx <= items.size()) System.out.println(detail.apply(items.get(idx - 1)));
+                else System.out.println("Niepoprawny numer (poza zakresem).");
+            } catch (NumberFormatException e) {
+                System.out.println("Niepoprawne wejście.");
+            }
+        }
+    }
+
     public static <T> void display(String header, List<T> items, Function<T, String> renderer) {
         if (items.isEmpty()) {
             System.out.println("Brak elementów.");

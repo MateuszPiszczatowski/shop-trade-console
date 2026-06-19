@@ -74,7 +74,8 @@ public class OrderSubmenu extends BaseMenu {
     }
 
     private void listOrders() {
-        PaginatedSelector.display("Lista zamówień", tradeRepository.findOrders(), Formatters::renderOrder);
+        PaginatedSelector.browse("Lista zamówień", tradeRepository.findOrders(),
+                Formatters::renderOrder, Formatters::orderDetail);
     }
 
     private List<OperationLine> readNewLines() {
