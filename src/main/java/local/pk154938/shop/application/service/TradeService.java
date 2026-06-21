@@ -132,6 +132,48 @@ public class TradeService {
         maybeMarkOrderFulfilled(delivery.getOrderId());
     }
 
+    /**
+     * Confirms a dispatched delivery that arrived <em>incomplete</em>.
+     * {@code receivedLines} are the quantities that actually arrived — a subset
+     * of, and never exceeding, the dispatched lines. The delivery is rewritten
+     * in place to reflect what was received (the original dispatched quantities
+     * are <em>not</em> retained anywhere), it is marked
+     * {@link DeliveryStatus#DELIVERED}, and only the received quantities are
+     * added to stock. The shortfall stays "not delivered" against the order, so
+     * the order can still be fully realised by a later dispatch.
+     */
+    public Delivery confirmPartialDelivery(UUID deliveryId, List<OperationLine> receivedLines, User currentUser) {
+        requireAuthorized(currentUser, Operation.REGISTER_DELIVERY);
+        Delivery delivery = tradeRepository.findDeliveryById(deliveryId)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Nie znaleziono dostawy o ID: " + deliveryId));
+        if (delivery.getStatus() == DeliveryStatus.DELIVERED)
+            throw new IllegalStateException("Dostawa jest już potwierdzona jako dostarczona.");
+        if (receivedLines == null || receivedLines.isEmpty())
+            throw new IllegalStateException("Brak pozycji, które dotarły — dostawy nie potwierdzono.");
+
+        Map<Product, Integer> dispatched = sumByProduct(delivery.getLines());
+        Map<Product, Integer> received = sumByProduct(receivedLines);
+        for (Map.Entry<Product, Integer> e : received.entrySet()) {
+            Integer sent = dispatched.get(e.getKey());
+            if (sent == null)
+                throw new IllegalStateException("Produkt '" + e.getKey().getName()
+                        + "' nie był nadany w tej dostawie.");
+            if (e.getValue() > sent)
+                throw new IllegalStateException("Dla produktu '" + e.getKey().getName()
+                        + "' dotarło więcej (" + e.getValue() + ") niż nadano (" + sent + ").");
+        }
+
+        Delivery confirmed = new Delivery(delivery.getId(), delivery.getTimestamp(),
+                receivedLines, delivery.getOrderId(), DeliveryStatus.DELIVERED);
+        tradeRepository.update(confirmed);
+        for (OperationLine line : receivedLines) {
+            stockRepository.increase(line.getProduct(), line.getQuantity());
+        }
+        maybeMarkOrderFulfilled(confirmed.getOrderId());
+        return confirmed;
+    }
+
     public Sale recordSale(List<OperationLine> lines, User currentUser) {
         requireAuthorized(currentUser, Operation.MAKE_SALE);
         verifyStockSufficient(lines);
