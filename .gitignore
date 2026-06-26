@@ -40,3 +40,6 @@ bin/
 /memory/
 ### Course materials (sprawozdania, diagramy, archiwa) ###
 Studiowe/
+
+### Claude Code local working dir ###
+.claude/
