@@ -58,6 +58,8 @@ IntelliJ project (no Maven/Gradle). The `org.json` jar is in `lib/`; the artifac
 2. Copy `scripts/start.bat.example` to `scripts/start.bat`, set your own `SHOP_APP_PEPPER` (and optionally `SHOP_DEFAULT_ADMIN_USER` / `SHOP_DEFAULT_ADMIN_PASS`), then run it - or run `java -Dfile.encoding=UTF-8 -jar <artifact>.jar` directly.
 3. Operations are written as JSON files in `operations/` next to the jar.
 
+**TODO:** migrate the manual `javac` / `lib/*.jar` build to a build tool (**Maven** or **Gradle**) for declarative dependency management and reproducible, one-command builds - this would also remove the vendored jar from the repo.
+
 > Users are kept **in memory** (a deliberate simplification) - they are not persisted, so a default admin is seeded on every start from `SHOP_DEFAULT_ADMIN_*`. Always set a real `SHOP_APP_PEPPER`.
 
 ### Accepted simplifications
@@ -119,6 +121,8 @@ Projekt IntelliJ (bez Mavena/Gradle). Biblioteka `org.json` jest w `lib/`; manif
 1. Zbuduj artefakt fat jar (IntelliJ: *Build → Build Artifacts*) albo skompiluj `src/main/java` z `lib/json-20250517.jar` i spakuj jar zawierający tę zależność.
 2. Skopiuj `scripts/start.bat.example` jako `scripts/start.bat`, ustaw własny `SHOP_APP_PEPPER` (i opcjonalnie `SHOP_DEFAULT_ADMIN_USER` / `SHOP_DEFAULT_ADMIN_PASS`), a następnie go uruchom - albo wywołaj `java -Dfile.encoding=UTF-8 -jar <artefakt>.jar` bezpośrednio.
 3. Operacje zapisują się jako pliki JSON w `operations/` obok jara.
+
+**TODO:** migracja ręcznego budowania (`javac` / `lib/*.jar`) na narzędzie budujące (**Maven** lub **Gradle**) - deklaratywne zarządzanie zależnościami i powtarzalny build jednym poleceniem; pozwoliłoby to też usunąć dołączony jar z repo.
 
 > Użytkownicy są przechowywani **w pamięci** (świadome uproszczenie) - nie są trwali, więc przy każdym starcie zakładany jest domyślny admin z `SHOP_DEFAULT_ADMIN_*`. Produkcyjnie zawsze ustaw własny `SHOP_APP_PEPPER`.
 
